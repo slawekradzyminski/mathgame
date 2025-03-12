@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Question } from '../../types/Question'
 import { useMathGame } from '../../hooks/MathGameProvider'
 import HintVisualization from '../HintVisualization'
@@ -11,6 +11,13 @@ export default function QuestionCard() {
   const [showHint, setShowHint] = useState(false)
   
   const currentQuestion = questions[currentIndex]
+
+  // Reset states when currentIndex changes
+  useEffect(() => {
+    setSelectedIndex(null)
+    setSelectedOption(null)
+    setShowHint(false)
+  }, [currentIndex])
   
   const handleClick = (option: number, index: number) => {
     if (selectedIndex !== null) return
@@ -18,12 +25,17 @@ export default function QuestionCard() {
     setSelectedIndex(index)
     setSelectedOption(option)
     
-    // Wait 2 seconds before moving to the next question
     setTimeout(() => {
       handleAnswerSelect(option)
+      // Reset states here as well, in case the effect doesn't catch it
       setSelectedIndex(null)
       setSelectedOption(null)
+      setShowHint(false)
     }, 2000)
+  }
+
+  const handleHintToggle = () => {
+    setShowHint(prev => !prev)
   }
   
   return (
@@ -35,7 +47,7 @@ export default function QuestionCard() {
       <div className="hint-container">
         <button 
           className="hint-button"
-          onClick={() => setShowHint(!showHint)}
+          onClick={handleHintToggle}
           data-testid="hint-button"
         >
           {showHint ? "Hide Hint" : "Show Hint"}

@@ -17,15 +17,21 @@ export default function Summary() {
   
   return (
     <div className="summary-container">
-      <h2 className="summary-title">Game Summary</h2>
-      
-      <p className="summary-score">
-        Your Score: <strong>{score}</strong> / {totalQuestions} ({percentage}%)
-      </p>
-      
-      <h3 style={{ marginBottom: '1rem', color: percentage >= 60 ? '#2e7d32' : percentage >= 40 ? '#ff9800' : '#d32f2f' }}>
-        {message}
-      </h3>
+      <div>
+        <h2 className="summary-title">Game Summary</h2>
+        
+        <p className="summary-score">
+          Your Score: <strong>{score}</strong> / {totalQuestions} ({percentage}%)
+        </p>
+        
+        <h3 style={{ 
+          marginBottom: '2rem', 
+          color: percentage >= 60 ? '#2e7d32' : percentage >= 40 ? '#ff9800' : '#d32f2f',
+          fontSize: '1.5rem'
+        }}>
+          {message}
+        </h3>
+      </div>
       
       <div className="answers-list">
         {answers.map((answer, index) => (

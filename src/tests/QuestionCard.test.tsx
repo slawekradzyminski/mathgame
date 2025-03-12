@@ -27,6 +27,15 @@ describe('QuestionCard', () => {
     operator: '+' as const
   }
 
+  const newMockQuestion = {
+    text: '7 - 4 = ?',
+    options: [2, 3, 4, 5],
+    correctIndex: 1,
+    num1: 7,
+    num2: 4,
+    operator: '-' as const
+  }
+
   beforeEach(() => {
     // Default mock implementation
     useMathGameMock.mockReturnValue({
@@ -64,7 +73,8 @@ describe('QuestionCard', () => {
     fireEvent.click(screen.getByText('8'))
     
     // then
-    expect(screen.getByTestId('answer-1')).toHaveClass('correct')
+    const button = screen.getByTestId('answer-1')
+    expect(button).toHaveClass('correct')
   })
 
   test('highlights wrong answer when selected and shows correct answer', () => {
@@ -75,8 +85,10 @@ describe('QuestionCard', () => {
     fireEvent.click(screen.getByText('7'))
     
     // then
-    expect(screen.getByTestId('answer-0')).toHaveClass('wrong')
-    expect(screen.getByTestId('answer-1')).toHaveClass('correct')
+    const wrongButton = screen.getByTestId('answer-0')
+    const correctButton = screen.getByTestId('answer-1')
+    expect(wrongButton).toHaveClass('wrong')
+    expect(correctButton).toHaveClass('correct')
   })
 
   test('disables all buttons after selection', () => {
@@ -143,5 +155,33 @@ describe('QuestionCard', () => {
     // then
     expect(screen.queryByTestId('hint-container')).not.toBeInTheDocument()
     expect(screen.getByText('Show Hint')).toBeInTheDocument()
+  })
+
+  test('hides hint when question changes', () => {
+    // given
+    const mockQuestions = [mockQuestion, newMockQuestion]
+    useMathGameMock.mockReturnValue({
+      questions: mockQuestions,
+      currentIndex: 0,
+      handleAnswerSelect: vi.fn()
+    })
+    const { rerender } = render(<QuestionCard />)
+    
+    // when - show hint for first question
+    fireEvent.click(screen.getByTestId('hint-button'))
+    
+    // then - hint should be visible
+    expect(screen.getByTestId('mock-hint-visualization')).toBeInTheDocument()
+    
+    // when - question changes
+    useMathGameMock.mockReturnValue({
+      questions: mockQuestions,
+      currentIndex: 1,
+      handleAnswerSelect: vi.fn()
+    })
+    rerender(<QuestionCard />)
+    
+    // then - hint should be hidden
+    expect(screen.queryByTestId('mock-hint-visualization')).not.toBeInTheDocument()
   })
 }) 

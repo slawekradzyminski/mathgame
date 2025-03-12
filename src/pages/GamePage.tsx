@@ -4,7 +4,7 @@ import QuestionCard from '../components/QuestionCard/QuestionCard'
 import Summary from '../components/Summary/Summary'
 
 export default function GamePage() {
-  const { currentIndex, score, isGameOver, questions } = useMathGame()
+  const { currentIndex, score, isGameOver } = useMathGame()
   const QUESTION_COUNT = 10
   
   if (isGameOver) {
