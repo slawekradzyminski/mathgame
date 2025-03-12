@@ -51,7 +51,7 @@ export default function MultiplicationHint({ num1, num2, isMobile }: OperatorHin
           ))}
         </Box>
         <Typography variant="body1">
-          So, {num1} × {num2} = <b>{num1 * num2}</b>!
+          So, {num1} × {num2} = <b>X</b>!
         </Typography>
       </Box>
     </Box>

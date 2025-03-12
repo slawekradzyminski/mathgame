@@ -31,7 +31,7 @@ describe('HintVisualization', () => {
     expect(screen.getByText("5 circles:")).toBeInTheDocument()
     expect(screen.getByText("3 circles:")).toBeInTheDocument()
     expect(screen.getByText(/If we put them all together, we get/)).toBeInTheDocument()
-    expect(screen.getByText("8", { exact: false })).toBeInTheDocument()
+    expect(screen.getByText("X")).toBeInTheDocument()
   })
 
   test('renders subtraction hint correctly', () => {
@@ -43,7 +43,7 @@ describe('HintVisualization', () => {
     expect(screen.getByText("Imagine you start with 10 things:")).toBeInTheDocument()
     expect(screen.getByText("When you take away 4 (the red ones):")).toBeInTheDocument()
     expect(screen.getByText(/You have/)).toBeInTheDocument()
-    expect(screen.getByText("6", { exact: false })).toBeInTheDocument()
+    expect(screen.getByText("X")).toBeInTheDocument()
   })
 
   test('renders multiplication hint correctly', () => {
@@ -54,6 +54,6 @@ describe('HintVisualization', () => {
     expect(screen.getByText("Let's multiply 6 by 3!")).toBeInTheDocument()
     expect(screen.getByText(/Multiplying is like adding 6 together 3 times/)).toBeInTheDocument()
     expect(screen.getByText(/So, 6 × 3 =/)).toBeInTheDocument()
-    expect(screen.getByText("18", { exact: false })).toBeInTheDocument()
+    expect(screen.getByText("X")).toBeInTheDocument()
   })
 }) 

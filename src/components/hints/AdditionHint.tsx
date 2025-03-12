@@ -53,7 +53,7 @@ export default function AdditionHint({ num1, num2, isMobile }: OperatorHintProps
           </Box>
         </Box>
         <Typography variant="body1" sx={{ mb: 2 }}>
-          If we put them all together, we get <b>{num1 + num2}</b> circles in total!
+          If we put them all together, we get <b>X</b> circles in total!
         </Typography>
         {!isMobile && (
           <Box sx={{ mt: 2, p: 2, backgroundColor: 'rgba(255, 255, 255, 0.5)', borderRadius: 1 }}>

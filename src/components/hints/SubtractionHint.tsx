@@ -50,7 +50,7 @@ export default function SubtractionHint({ num1, num2, isMobile }: OperatorHintPr
           {renderDots(num1 - num2, 'green', undefined, isMobile)}
         </Box>
         <Typography variant="body1">
-          You have <b>{num1 - num2}</b> left!
+          You have <b>X</b> left!
         </Typography>
       </Box>
     </Box>
