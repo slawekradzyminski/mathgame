@@ -16,7 +16,8 @@ export default function QuestionCard({ question, onAnswerSelect }: QuestionCardP
         borderRadius: 4, 
         overflow: 'hidden',
         background: 'linear-gradient(to bottom right, #ffffff, #f5f5f5)',
-        width: '100%'
+        width: '100%',
+        maxWidth: '100%'
       }}
     >
       <Box 

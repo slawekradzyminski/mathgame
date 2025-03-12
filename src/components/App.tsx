@@ -1,5 +1,5 @@
 import { ThemeProvider, createTheme } from '@mui/material/styles'
-import { CssBaseline } from '@mui/material'
+import { CssBaseline, Box } from '@mui/material'
 import GamePage from '../pages/GamePage'
 
 const theme = createTheme({
@@ -28,6 +28,11 @@ const theme = createTheme({
     subtitle1: {
       fontWeight: 500,
     },
+    h3: {
+      fontSize: '2.5rem',
+      fontWeight: 700,
+      color: '#2196f3',
+    },
   },
   components: {
     MuiButton: {
@@ -54,11 +59,11 @@ const theme = createTheme({
     MuiContainer: {
       styleOverrides: {
         root: {
+          height: '100%',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          minHeight: '100vh',
         },
       },
     },
@@ -69,7 +74,22 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <GamePage />
+      <Box
+        data-testid="game-container"
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          minHeight: '100vh',
+          width: '100%',
+          bgcolor: 'background.default',
+          padding: 0,
+          margin: 0,
+        }}
+      >
+        <GamePage />
+      </Box>
     </ThemeProvider>
   )
 } 
