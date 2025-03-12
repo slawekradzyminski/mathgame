@@ -137,7 +137,7 @@ describe('mathQuestionGenerator', () => {
     }
   })
   
-  test('multiplication questions should use small numbers for 7-year-olds', () => {
+  test('multiplication questions should use appropriate numbers for 7-year-olds', () => {
     // given
     let foundMultiplicationQuestion = false
     let attempts = 0
@@ -154,8 +154,9 @@ describe('mathQuestionGenerator', () => {
         const num1 = parseInt(a, 10)
         const num2 = parseInt(b, 10)
         
-        expect(num1).toBeLessThanOrEqual(5)
-        expect(num2).toBeLessThanOrEqual(5)
+        // One number can be up to 20, but the other should be 10 or less
+        expect(Math.min(num1, num2)).toBeLessThanOrEqual(10)
+        expect(Math.max(num1, num2)).toBeLessThanOrEqual(20)
       }
       
       attempts++
@@ -164,6 +165,68 @@ describe('mathQuestionGenerator', () => {
     // If we didn't find a multiplication question after many attempts, skip this test
     if (!foundMultiplicationQuestion) {
       console.log('No multiplication question generated in test attempts, skipping test')
+    }
+  })
+  
+  test('addition questions should have one smaller operand for 7-year-olds', () => {
+    // given
+    let foundAdditionQuestion = false
+    let attempts = 0
+    const maxAttempts = 100
+    
+    // when/then
+    while (!foundAdditionQuestion && attempts < maxAttempts) {
+      const question = generateQuestion()
+      const matches = question.text.match(/(\d+)\s*\+\s*(\d+)\s*=\s*\?/)
+      
+      if (matches) {
+        foundAdditionQuestion = true
+        const [, a, b] = matches
+        const num1 = parseInt(a, 10)
+        const num2 = parseInt(b, 10)
+        
+        // One number can be up to 100, but the other should be 20 or less
+        expect(Math.min(num1, num2)).toBeLessThanOrEqual(20)
+        expect(Math.max(num1, num2)).toBeLessThanOrEqual(100)
+      }
+      
+      attempts++
+    }
+    
+    // If we didn't find an addition question after many attempts, skip this test
+    if (!foundAdditionQuestion) {
+      console.log('No addition question generated in test attempts, skipping test')
+    }
+  })
+  
+  test('subtraction questions should have a smaller second operand for 7-year-olds', () => {
+    // given
+    let foundSubtractionQuestion = false
+    let attempts = 0
+    const maxAttempts = 100
+    
+    // when/then
+    while (!foundSubtractionQuestion && attempts < maxAttempts) {
+      const question = generateQuestion()
+      const matches = question.text.match(/(\d+)\s*-\s*(\d+)\s*=\s*\?/)
+      
+      if (matches) {
+        foundSubtractionQuestion = true
+        const [, a, b] = matches
+        const num1 = parseInt(a, 10)
+        const num2 = parseInt(b, 10)
+        
+        // First number can be up to 100, but the second should be 20 or less
+        expect(num2).toBeLessThanOrEqual(20)
+        expect(num1).toBeLessThanOrEqual(100)
+      }
+      
+      attempts++
+    }
+    
+    // If we didn't find a subtraction question after many attempts, skip this test
+    if (!foundSubtractionQuestion) {
+      console.log('No subtraction question generated in test attempts, skipping test')
     }
   })
 }) 

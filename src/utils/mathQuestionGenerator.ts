@@ -24,16 +24,18 @@ export function generateQuestion(): Question {
 
   switch (op) {
     case '+':
-      // Addition: any numbers from 1-10 are fine
-      a = randomNumber(1, 10)
-      b = randomNumber(1, 10)
+      // Addition: numbers from 1-100, but keep one operand smaller for easier addition
+      a = randomNumber(1, 100)
+      // For a 7-year-old, keep one number smaller to make addition manageable
+      b = randomNumber(1, Math.min(20, a))
       correctAnswer = a + b
       text = `${a} + ${b} = ?`
       break
     case '-':
       // Subtraction: ensure a >= b so result is never negative
-      a = randomNumber(5, 10)
-      b = randomNumber(1, a)
+      a = randomNumber(10, 100)
+      // For a 7-year-old, keep the second number smaller to make subtraction manageable
+      b = randomNumber(1, Math.min(20, a - 1))
       correctAnswer = a - b
       // Ensure correctAnswer is at least 1
       if (correctAnswer < 1) correctAnswer = 1
@@ -41,14 +43,15 @@ export function generateQuestion(): Question {
       break
     case '*':
       // Multiplication: keep it simple for a 7-year-old
-      a = randomNumber(1, 5)
-      b = randomNumber(1, 5)
+      // One number can be larger (up to 20) but the other should be small (1-10)
+      a = randomNumber(1, 20)
+      b = randomNumber(1, 10)
       correctAnswer = a * b
       text = `${a} × ${b} = ?`
       break
     default:
-      a = randomNumber(1, 10)
-      b = randomNumber(1, 10)
+      a = randomNumber(1, 100)
+      b = randomNumber(1, 20)
       correctAnswer = a + b
       text = `${a} + ${b} = ?`
   }
@@ -59,8 +62,10 @@ export function generateQuestion(): Question {
   while (distractors.size < 3) {
     // Generate a distractor within a reasonable range of the correct answer
     // Ensure all distractors are positive numbers (at least 1)
-    const min = Math.max(1, correctAnswer - 5)
-    const max = correctAnswer + 5
+    // For larger numbers, use a percentage-based range to keep distractors reasonable
+    const range = Math.max(5, Math.floor(correctAnswer * 0.2)) // 20% of correct answer or at least 5
+    const min = Math.max(1, correctAnswer - range)
+    const max = correctAnswer + range
     const distractor = randomNumber(min, max)
     
     // Double check that the distractor is greater than 0
