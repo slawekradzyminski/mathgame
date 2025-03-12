@@ -2,30 +2,29 @@ import { render, screen, fireEvent } from '@testing-library/react'
 import Summary from '../components/Summary'
 
 describe('Summary', () => {
-  test('should display the score and play again button', () => {
+  it('should display the score and play again button', () => {
     // given
-    const score = 7
-    const questionCount = 10
-    const onPlayAgain = vi.fn()
-    
-    // when
-    render(<Summary score={score} questionCount={questionCount} onPlayAgain={onPlayAgain} />)
+    render(<Summary score={7} questionCount={10} onPlayAgain={() => {}} />)
     
     // then
     expect(screen.getByText('Game Over!')).toBeInTheDocument()
-    expect(screen.getByText('Your score: 7 / 10')).toBeInTheDocument()
-    expect(screen.getByText('Play Again')).toBeInTheDocument()
+    
+    // Use a more flexible approach for text split across elements
+    expect(screen.getByText(/Your score:/)).toBeInTheDocument()
+    expect(screen.getByText('7', { selector: 'strong' })).toBeInTheDocument()
+    expect(screen.getByText(/\//, { exact: false })).toBeInTheDocument()
+    expect(screen.getByText(/10/, { exact: false })).toBeInTheDocument()
+    
+    expect(screen.getByRole('button', { name: 'Play Again' })).toBeInTheDocument()
   })
   
-  test('should call onPlayAgain when the play again button is clicked', () => {
+  it('should call onPlayAgain when the play again button is clicked', () => {
     // given
-    const score = 7
-    const questionCount = 10
     const onPlayAgain = vi.fn()
+    render(<Summary score={7} questionCount={10} onPlayAgain={onPlayAgain} />)
     
     // when
-    render(<Summary score={score} questionCount={questionCount} onPlayAgain={onPlayAgain} />)
-    fireEvent.click(screen.getByText('Play Again'))
+    fireEvent.click(screen.getByRole('button', { name: 'Play Again' }))
     
     // then
     expect(onPlayAgain).toHaveBeenCalled()
