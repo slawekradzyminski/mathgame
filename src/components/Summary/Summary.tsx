@@ -17,7 +17,7 @@ export default function Summary() {
   
   return (
     <div className="summary-container">
-      <div>
+      <div className="summary-header">
         <h2 className="summary-title">Game Summary</h2>
         
         <p className="summary-score">
@@ -25,7 +25,6 @@ export default function Summary() {
         </p>
         
         <h3 style={{ 
-          marginBottom: '2rem', 
           color: percentage >= 60 ? '#2e7d32' : percentage >= 40 ? '#ff9800' : '#d32f2f',
           fontSize: '1.5rem'
         }}>
