@@ -26,16 +26,14 @@ export function generateQuestion(): Question {
     case '+':
       // Addition: numbers from 1-100, but keep one operand smaller for easier addition
       a = randomNumber(1, 100)
-      // For a 7-year-old, keep one number smaller to make addition manageable
-      b = randomNumber(1, Math.min(20, a))
+      b = randomNumber(1, 100)
       correctAnswer = a + b
       text = `${a} + ${b} = ?`
       break
     case '-':
       // Subtraction: ensure a >= b so result is never negative
       a = randomNumber(10, 100)
-      // For a 7-year-old, keep the second number smaller to make subtraction manageable
-      b = randomNumber(1, Math.min(20, a - 1))
+      b = randomNumber(1, Math.min(100, a - 1))
       correctAnswer = a - b
       // Ensure correctAnswer is at least 1
       if (correctAnswer < 1) correctAnswer = 1

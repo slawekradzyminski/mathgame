@@ -168,7 +168,7 @@ describe('mathQuestionGenerator', () => {
     }
   })
   
-  test('addition questions should have one smaller operand for 7-year-olds', () => {
+  test('addition questions should use numbers up to 100', () => {
     // given
     let foundAdditionQuestion = false
     let attempts = 0
@@ -185,9 +185,11 @@ describe('mathQuestionGenerator', () => {
         const num1 = parseInt(a, 10)
         const num2 = parseInt(b, 10)
         
-        // One number can be up to 100, but the other should be 20 or less
-        expect(Math.min(num1, num2)).toBeLessThanOrEqual(20)
-        expect(Math.max(num1, num2)).toBeLessThanOrEqual(100)
+        // Both numbers can be up to 100
+        expect(num1).toBeGreaterThanOrEqual(1)
+        expect(num1).toBeLessThanOrEqual(100)
+        expect(num2).toBeGreaterThanOrEqual(1)
+        expect(num2).toBeLessThanOrEqual(100)
       }
       
       attempts++
@@ -199,7 +201,7 @@ describe('mathQuestionGenerator', () => {
     }
   })
   
-  test('subtraction questions should have a smaller second operand for 7-year-olds', () => {
+  test('subtraction questions should use numbers up to 100', () => {
     // given
     let foundSubtractionQuestion = false
     let attempts = 0
@@ -216,9 +218,12 @@ describe('mathQuestionGenerator', () => {
         const num1 = parseInt(a, 10)
         const num2 = parseInt(b, 10)
         
-        // First number can be up to 100, but the second should be 20 or less
-        expect(num2).toBeLessThanOrEqual(20)
+        // Both numbers can be up to 100, but first must be >= second
+        expect(num1).toBeGreaterThanOrEqual(10)
         expect(num1).toBeLessThanOrEqual(100)
+        expect(num2).toBeGreaterThanOrEqual(1)
+        expect(num2).toBeLessThanOrEqual(100)
+        expect(num2).toBeLessThanOrEqual(num1)
       }
       
       attempts++
