@@ -1,12 +1,14 @@
 import { useState } from 'react'
 import { Question } from '../../types/Question'
 import { useMathGame } from '../../hooks/MathGameProvider'
+import HintVisualization from '../HintVisualization'
 import './QuestionCard.css'
 
 export default function QuestionCard() {
   const { questions, currentIndex, handleAnswerSelect } = useMathGame()
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
   const [selectedOption, setSelectedOption] = useState<number | null>(null)
+  const [showHint, setShowHint] = useState(false)
   
   const currentQuestion = questions[currentIndex]
   
@@ -29,6 +31,27 @@ export default function QuestionCard() {
       <h2 className="question-text">
         {currentQuestion.text}
       </h2>
+      
+      <div className="hint-container">
+        <button 
+          className="hint-button"
+          onClick={() => setShowHint(!showHint)}
+          data-testid="hint-button"
+        >
+          {showHint ? "Hide Hint" : "Show Hint"}
+        </button>
+      </div>
+      
+      {showHint && (
+        <div className="hint-visualization-container" data-testid="hint-container">
+          <HintVisualization 
+            operator={currentQuestion.operator} 
+            num1={currentQuestion.num1} 
+            num2={currentQuestion.num2} 
+          />
+        </div>
+      )}
+      
       <div className="answers-container">
         {currentQuestion.options.map((option, index) => {
           let className = "answer-button"

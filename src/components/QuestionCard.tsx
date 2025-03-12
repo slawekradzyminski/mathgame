@@ -1,5 +1,7 @@
+import { useState } from 'react'
 import { CardContent, Typography, Button, Stack, Box, Paper } from '@mui/material'
 import { Question } from '../types/Question'
+import HintVisualization from './HintVisualization'
 
 interface QuestionCardProps {
   question: Question
@@ -7,7 +9,8 @@ interface QuestionCardProps {
 }
 
 export default function QuestionCard({ question, onAnswerSelect }: QuestionCardProps) {
-  const { num1, num2, options } = question
+  const { num1, num2, operator, options } = question
+  const [showHint, setShowHint] = useState(false)
 
   return (
     <Paper 
@@ -35,10 +38,29 @@ export default function QuestionCard({ question, onAnswerSelect }: QuestionCardP
             fontSize: { xs: '2.5rem', sm: '3.5rem', md: '4rem' }
           }}
         >
-          {num1} + {num2} = ?
+          {num1} {operator === '*' ? '×' : operator} {num2} = ?
         </Typography>
       </Box>
-      <CardContent sx={{ p: { xs: 3, sm: 5 } }}>
+      <CardContent sx={{ p: { xs: 3, sm: 5 }, textAlign: 'center' }}>
+        <Box sx={{ mb: 3 }}>
+          <Button 
+            variant="outlined"
+            onClick={() => setShowHint(!showHint)}
+            data-testid="hint-button"
+            sx={{ 
+              fontWeight: 'bold'
+            }}
+          >
+            {showHint ? "Hide Hint" : "Show Hint"}
+          </Button>
+        </Box>
+
+        {showHint && (
+          <Box sx={{ mb: 3 }}>
+            <HintVisualization operator={operator} num1={num1} num2={num2} />
+          </Box>
+        )}
+
         <Stack spacing={3}>
           {options.map((option, index) => (
             <Button

@@ -7,6 +7,11 @@ vi.mock('../hooks/MathGameProvider', () => ({
   useMathGame: vi.fn()
 }))
 
+// Mock the HintVisualization component
+vi.mock('../components/HintVisualization', () => ({
+  default: vi.fn(() => <div data-testid="mock-hint-visualization">Hint Visualization</div>)
+}))
+
 // Import the mocked hook
 import { useMathGame } from '../hooks/MathGameProvider'
 
@@ -16,7 +21,10 @@ describe('QuestionCard', () => {
   const mockQuestion = {
     text: '5 + 3 = ?',
     options: [7, 8, 9, 10],
-    correctIndex: 1
+    correctIndex: 1,
+    num1: 5,
+    num2: 3,
+    operator: '+' as const
   }
 
   beforeEach(() => {
@@ -80,7 +88,9 @@ describe('QuestionCard', () => {
     
     // then
     const buttons = screen.getAllByRole('button')
-    buttons.forEach(button => {
+    // Exclude the hint button from the check
+    const answerButtons = buttons.filter(button => !button.textContent?.includes('Hint'))
+    answerButtons.forEach(button => {
       expect(button).toBeDisabled()
     })
   })
@@ -105,5 +115,33 @@ describe('QuestionCard', () => {
     
     // then
     expect(handleAnswerSelect).toHaveBeenCalledWith(8)
+  })
+
+  test('renders hint button', () => {
+    // given/when
+    render(<QuestionCard />)
+    
+    // then
+    expect(screen.getByTestId('hint-button')).toBeInTheDocument()
+    expect(screen.getByText('Show Hint')).toBeInTheDocument()
+  })
+
+  test('toggles hint visibility when hint button is clicked', () => {
+    // given
+    render(<QuestionCard />)
+    
+    // when - show hint
+    fireEvent.click(screen.getByTestId('hint-button'))
+    
+    // then
+    expect(screen.getByTestId('hint-container')).toBeInTheDocument()
+    expect(screen.getByText('Hide Hint')).toBeInTheDocument()
+    
+    // when - hide hint
+    fireEvent.click(screen.getByTestId('hint-button'))
+    
+    // then
+    expect(screen.queryByTestId('hint-container')).not.toBeInTheDocument()
+    expect(screen.getByText('Show Hint')).toBeInTheDocument()
   })
 }) 

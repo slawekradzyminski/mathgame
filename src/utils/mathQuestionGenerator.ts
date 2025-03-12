@@ -15,7 +15,7 @@ function randomNumber(min: number, max: number): number {
 export function generateQuestion(): Question {
   // For a 7-year-old, we'll use simpler operations and ensure no negative results
   const operators = ['+', '-', '*']
-  const op = operators[Math.floor(Math.random() * operators.length)]
+  const op = operators[Math.floor(Math.random() * operators.length)] as '+' | '-' | '*'
 
   let a: number
   let b: number
@@ -90,7 +90,14 @@ export function generateQuestion(): Question {
     finalOptions[correctIndex] = 1;
   }
 
-  return { text, options: finalOptions, correctIndex }
+  return { 
+    text, 
+    options: finalOptions, 
+    correctIndex,
+    num1: a,
+    num2: b,
+    operator: op
+  }
 }
 
 /**
