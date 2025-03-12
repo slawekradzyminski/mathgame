@@ -1,6 +1,12 @@
 export interface Question {
-  num1: number
-  num2: number
-  correctAnswer: number
+  text: string
   options: number[]
+  correctIndex: number
+}
+
+export interface AnswerRecord {
+  questionText: string
+  selected: number
+  correct: number
+  isCorrect: boolean
 } 

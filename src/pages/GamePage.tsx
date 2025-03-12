@@ -1,21 +1,12 @@
-import { Container, Typography, Box, Paper, Grid } from '@mui/material'
-import { useMathGame } from '../hooks/useMathGame'
-import QuestionCard from '../components/QuestionCard'
-import Summary from '../components/Summary'
-
-const QUESTION_COUNT = 10
-const MAX_RANGE = 100
+import { Container, Typography, Box, Paper, LinearProgress } from '@mui/material'
+import { useMathGame } from '../hooks/MathGameProvider'
+import QuestionCard from '../components/QuestionCard/QuestionCard'
+import Summary from '../components/Summary/Summary'
 
 export default function GamePage() {
-  const {
-    questions,
-    currentIndex,
-    score,
-    isGameOver,
-    handleAnswerSelect,
-    restartGame
-  } = useMathGame(QUESTION_COUNT, MAX_RANGE)
-
+  const { currentIndex, score, isGameOver, questions } = useMathGame()
+  const QUESTION_COUNT = 10
+  
   if (isGameOver) {
     return (
       <Container 
@@ -35,27 +26,11 @@ export default function GamePage() {
             maxWidth: '800px'
           }}
         >
-          <Paper 
-            elevation={3} 
-            sx={{ 
-              p: { xs: 3, sm: 5 }, 
-              borderRadius: 4, 
-              textAlign: 'center',
-              background: 'linear-gradient(to bottom right, #ffffff, #f5f5f5)'
-            }}
-          >
-            <Summary
-              score={score}
-              questionCount={QUESTION_COUNT}
-              onPlayAgain={restartGame}
-            />
-          </Paper>
+          <Summary />
         </Box>
       </Container>
     )
   }
-
-  const currentQuestion = questions[currentIndex]
 
   return (
     <Container 
@@ -94,30 +69,27 @@ export default function GamePage() {
               Score: {score}
             </Typography>
           </Box>
-          <Box 
+          <LinearProgress 
+            variant="determinate" 
+            value={(currentIndex / QUESTION_COUNT) * 100} 
             sx={{ 
-              width: '100%', 
-              height: 12, 
-              bgcolor: 'grey.200', 
-              borderRadius: 6, 
-              mb: 4 
-            }}
-          >
-            <Box 
-              sx={{ 
-                width: `${((currentIndex) / QUESTION_COUNT) * 100}%`, 
-                height: '100%', 
-                bgcolor: 'primary.main', 
-                borderRadius: 6,
-                transition: 'width 0.3s ease-in-out'
-              }} 
-            />
-          </Box>
+              height: 10, 
+              borderRadius: 5,
+              mb: 4
+            }} 
+          />
         </Box>
-        <QuestionCard
-          question={currentQuestion}
-          onAnswerSelect={handleAnswerSelect}
-        />
+        <Paper 
+          elevation={3} 
+          sx={{ 
+            p: { xs: 3, sm: 5 }, 
+            borderRadius: 4, 
+            textAlign: 'center',
+            background: 'linear-gradient(to bottom right, #ffffff, #f5f5f5)'
+          }}
+        >
+          <QuestionCard />
+        </Paper>
       </Box>
     </Container>
   )

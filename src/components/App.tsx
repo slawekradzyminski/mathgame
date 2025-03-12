@@ -1,6 +1,7 @@
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 import { CssBaseline, Box } from '@mui/material'
 import GamePage from '../pages/GamePage'
+import { MathGameProvider } from '../hooks/MathGameProvider'
 
 const theme = createTheme({
   palette: {
@@ -74,22 +75,24 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Box
-        data-testid="game-container"
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          minHeight: '100vh',
-          width: '100%',
-          bgcolor: 'background.default',
-          padding: 0,
-          margin: 0,
-        }}
-      >
-        <GamePage />
-      </Box>
+      <MathGameProvider>
+        <Box
+          data-testid="game-container"
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            minHeight: '100vh',
+            width: '100%',
+            bgcolor: 'background.default',
+            padding: 0,
+            margin: 0,
+          }}
+        >
+          <GamePage />
+        </Box>
+      </MathGameProvider>
     </ThemeProvider>
   )
 } 
