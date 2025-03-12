@@ -106,14 +106,35 @@ describe('mathQuestionGenerator', () => {
   
   test('all options should be positive numbers', () => {
     // given/when
-    const questions = generateQuestions(10)
+    // Generate a larger set of questions to increase test coverage
+    const questions = generateQuestions(20)
     
     // then
+    let allPositive = true;
+    let nonPositiveFound = null;
+    
     questions.forEach(question => {
       question.options.forEach(option => {
-        expect(option).toBeGreaterThan(0)
-      })
-    })
+        if (option <= 0) {
+          allPositive = false;
+          nonPositiveFound = option;
+        }
+        expect(option).toBeGreaterThan(0);
+      });
+    });
+    
+    // Additional assertion with detailed error message
+    if (!allPositive) {
+      throw new Error(`Found non-positive option: ${nonPositiveFound}`);
+    }
+    
+    // Direct test of the generateQuestion function
+    for (let i = 0; i < 50; i++) {
+      const question = generateQuestion();
+      question.options.forEach(option => {
+        expect(option).toBeGreaterThan(0);
+      });
+    }
   })
   
   test('multiplication questions should use small numbers for 7-year-olds', () => {

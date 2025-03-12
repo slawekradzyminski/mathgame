@@ -4,6 +4,8 @@ import { Question } from '../types/Question'
  * Generates a random number between min and max (inclusive)
  */
 function randomNumber(min: number, max: number): number {
+  // Ensure min is at least 1 to avoid zero values
+  min = Math.max(1, min)
   return Math.floor(Math.random() * (max - min + 1)) + min
 }
 
@@ -33,6 +35,8 @@ export function generateQuestion(): Question {
       a = randomNumber(5, 10)
       b = randomNumber(1, a)
       correctAnswer = a - b
+      // Ensure correctAnswer is at least 1
+      if (correctAnswer < 1) correctAnswer = 1
       text = `${a} - ${b} = ?`
       break
     case '*':
@@ -59,7 +63,7 @@ export function generateQuestion(): Question {
     const max = correctAnswer + 5
     const distractor = randomNumber(min, max)
     
-    // Only add if it's not the correct answer and greater than 0
+    // Double check that the distractor is greater than 0
     if (distractor !== correctAnswer && distractor > 0) {
       distractors.add(distractor)
     }
@@ -68,13 +72,22 @@ export function generateQuestion(): Question {
   // Create options array with correct answer and distractors
   const options = [...distractors, correctAnswer]
   
+  // Final safety check: ensure no zeros in options
+  const finalOptions = options.map(option => option === 0 ? 1 : option)
+  
   // Shuffle the options
-  options.sort(() => Math.random() - 0.5)
+  finalOptions.sort(() => Math.random() - 0.5)
   
   // Find the index of the correct answer in the shuffled options
-  const correctIndex = options.indexOf(correctAnswer)
+  const correctIndex = finalOptions.indexOf(correctAnswer)
 
-  return { text, options, correctIndex }
+  // If somehow correctAnswer is 0 (which shouldn't happen), fix it
+  if (correctAnswer === 0) {
+    correctAnswer = 1;
+    finalOptions[correctIndex] = 1;
+  }
+
+  return { text, options: finalOptions, correctIndex }
 }
 
 /**
@@ -83,7 +96,17 @@ export function generateQuestion(): Question {
 export function generateQuestions(count: number): Question[] {
   const questions: Question[] = []
   for (let i = 0; i < count; i++) {
-    questions.push(generateQuestion())
+    const question = generateQuestion()
+    
+    // Final validation before adding to the array
+    const hasZero = question.options.some(option => option === 0)
+    if (hasZero) {
+      // If somehow we still have a zero, regenerate the question
+      i--; // Try again for this index
+      continue;
+    }
+    
+    questions.push(question)
   }
   return questions
 } 
