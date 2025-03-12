@@ -6,6 +6,7 @@
   border-radius: 8px;
   padding: 2rem;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: visible;
 }
 
 .summary-title {
@@ -27,6 +28,9 @@
   gap: 1rem;
   margin-bottom: 2rem;
   text-align: left;
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 10px;
 }
 
 .answer-item {
@@ -34,6 +38,7 @@
   padding: 1rem;
   border-radius: 6px;
   transition: transform 0.2s;
+  margin-bottom: 0.5rem;
 }
 
 .answer-item:hover {

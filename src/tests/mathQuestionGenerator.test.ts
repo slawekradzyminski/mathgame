@@ -72,4 +72,77 @@ describe('mathQuestionGenerator', () => {
     const uniqueOptions = new Set(question.options)
     expect(uniqueOptions.size).toBe(4)
   })
+  
+  test('subtraction questions should never have negative results', () => {
+    // given
+    let foundSubtractionQuestion = false
+    let attempts = 0
+    const maxAttempts = 100
+    
+    // when/then
+    while (!foundSubtractionQuestion && attempts < maxAttempts) {
+      const question = generateQuestion()
+      const matches = question.text.match(/(\d+)\s*-\s*(\d+)\s*=\s*\?/)
+      
+      if (matches) {
+        foundSubtractionQuestion = true
+        const [, a, b] = matches
+        const num1 = parseInt(a, 10)
+        const num2 = parseInt(b, 10)
+        const result = num1 - num2
+        
+        expect(result).toBeGreaterThanOrEqual(0)
+        expect(num1).toBeGreaterThanOrEqual(num2)
+      }
+      
+      attempts++
+    }
+    
+    // If we didn't find a subtraction question after many attempts, skip this test
+    if (!foundSubtractionQuestion) {
+      console.log('No subtraction question generated in test attempts, skipping test')
+    }
+  })
+  
+  test('all options should be positive numbers', () => {
+    // given/when
+    const questions = generateQuestions(10)
+    
+    // then
+    questions.forEach(question => {
+      question.options.forEach(option => {
+        expect(option).toBeGreaterThan(0)
+      })
+    })
+  })
+  
+  test('multiplication questions should use small numbers for 7-year-olds', () => {
+    // given
+    let foundMultiplicationQuestion = false
+    let attempts = 0
+    const maxAttempts = 100
+    
+    // when/then
+    while (!foundMultiplicationQuestion && attempts < maxAttempts) {
+      const question = generateQuestion()
+      const matches = question.text.match(/(\d+)\s*×\s*(\d+)\s*=\s*\?/)
+      
+      if (matches) {
+        foundMultiplicationQuestion = true
+        const [, a, b] = matches
+        const num1 = parseInt(a, 10)
+        const num2 = parseInt(b, 10)
+        
+        expect(num1).toBeLessThanOrEqual(5)
+        expect(num2).toBeLessThanOrEqual(5)
+      }
+      
+      attempts++
+    }
+    
+    // If we didn't find a multiplication question after many attempts, skip this test
+    if (!foundMultiplicationQuestion) {
+      console.log('No multiplication question generated in test attempts, skipping test')
+    }
+  })
 }) 

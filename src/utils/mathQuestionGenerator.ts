@@ -11,29 +11,40 @@ function randomNumber(min: number, max: number): number {
  * Generates a single math question with random operands and operator
  */
 export function generateQuestion(): Question {
+  // For a 7-year-old, we'll use simpler operations and ensure no negative results
   const operators = ['+', '-', '*']
   const op = operators[Math.floor(Math.random() * operators.length)]
 
-  const a = randomNumber(1, 10)
-  const b = randomNumber(1, 10)
-
+  let a: number
+  let b: number
   let correctAnswer: number
   let text: string
 
   switch (op) {
     case '+':
+      // Addition: any numbers from 1-10 are fine
+      a = randomNumber(1, 10)
+      b = randomNumber(1, 10)
       correctAnswer = a + b
       text = `${a} + ${b} = ?`
       break
     case '-':
+      // Subtraction: ensure a >= b so result is never negative
+      a = randomNumber(5, 10)
+      b = randomNumber(1, a)
       correctAnswer = a - b
       text = `${a} - ${b} = ?`
       break
     case '*':
+      // Multiplication: keep it simple for a 7-year-old
+      a = randomNumber(1, 5)
+      b = randomNumber(1, 5)
       correctAnswer = a * b
       text = `${a} × ${b} = ?`
       break
     default:
+      a = randomNumber(1, 10)
+      b = randomNumber(1, 10)
       correctAnswer = a + b
       text = `${a} + ${b} = ?`
   }
@@ -43,12 +54,13 @@ export function generateQuestion(): Question {
   
   while (distractors.size < 3) {
     // Generate a distractor within a reasonable range of the correct answer
-    const min = Math.max(1, correctAnswer - 10)
-    const max = correctAnswer + 10
+    // Ensure all distractors are positive numbers (at least 1)
+    const min = Math.max(1, correctAnswer - 5)
+    const max = correctAnswer + 5
     const distractor = randomNumber(min, max)
     
-    // Only add if it's not the correct answer
-    if (distractor !== correctAnswer) {
+    // Only add if it's not the correct answer and greater than 0
+    if (distractor !== correctAnswer && distractor > 0) {
       distractors.add(distractor)
     }
   }
